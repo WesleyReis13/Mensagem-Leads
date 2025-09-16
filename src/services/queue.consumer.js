@@ -19,12 +19,10 @@ function initQueueConsumer(socketInstance) {
     console.log(`🎯 Processando job ${job.id} | Tipo: ${job.name}`);
     
     try {
-      const { to, text } = job.data;
-      
-      
-      await sendTextMessage(sock, to, text);
-      
-      console.log(`✅ Mensagem enviada para ${to}`);
+      if (job.name === 'send-welcome-message') {
+        const { to, text } = job.data;
+        await sendTextMessage(sock, to, text);
+      }
       
     } catch (error) {
       console.error('❌ Erro ao processar job:', error);
