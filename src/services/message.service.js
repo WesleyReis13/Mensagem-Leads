@@ -1,12 +1,17 @@
 
 async function sendTextMessage(sock, to, text) {
-  try {
-    await sock.sendMessage(to, { text: text });
-    console.log(`✅ Mensagem enviada para ${to}: ${text}`);
-  } catch (error) {
-    console.error(`❌ Erro ao enviar mensagem para ${to}:`, error);
-    throw error; 
+  if (!sock || typeof sock.sendMessage !== 'function') {
+    throw new Error('Socket do Baileys não está pronto');
   }
+
+  
+  const jid = (typeof to === 'string' && to.includes('@'))
+    ? to
+    : `${String(to).replace(/\D/g, '')}@c.us`;
+
+  console.log('➡️ sendTextMessage -> jid:', jid, 'text:', text);
+
+  return await sock.sendMessage(jid, { text });
 }
 
 
@@ -26,9 +31,7 @@ async function processMessage(message, sock) {
       await sendTextMessage(sock, from, '🏓 Pong!');
     }
     
-   if (text === '!galo') {
-      await sendTextMessage(sock, from, 'Doido!');
-    }
+   
   }
 }
 
