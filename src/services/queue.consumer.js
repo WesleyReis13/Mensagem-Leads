@@ -23,6 +23,11 @@ function initQueueConsumer(socketInstance) {
         const { to, text } = job.data;
         await sendTextMessage(sock, to, text);
       }
+
+      if (job.name === 'send-campaign-message') {
+        const { to, text } = job.data;
+        await sendTextMessage(sock, to, text);
+      }
       
     } catch (error) {
       console.error('❌ Erro ao processar job:', error);
